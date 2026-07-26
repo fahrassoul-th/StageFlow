@@ -6,12 +6,19 @@ from app.core.config import get_settings
 
 settings = get_settings()
 
+# pool_size/max_overflow are QueuePool (Postgres) options - SQLite engines
+# default to NullPool, which rejects them outright. Only pass them for a
+# real Postgres DATABASE_URL, so switching to sqlite+aiosqlite for local
+# dev (as the README suggests) doesn't crash at import time.
+_engine_kwargs = {}
+if not settings.database_url.startswith("sqlite"):
+    _engine_kwargs = {"pool_size": 10, "max_overflow": 20}
+
 async_engine = create_async_engine(
     settings.database_url,
     echo=settings.environment == "development",
     pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
+    **_engine_kwargs,
 )
 
 AsyncSessionLocal = async_sessionmaker(

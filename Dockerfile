@@ -9,8 +9,8 @@ WORKDIR /build
 RUN python -m venv "${VIRTUAL_ENV}"
 COPY requirements.txt .
 
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip --timeout 120 --retries 10 && \
+    pip install --no-cache-dir --timeout 120 --retries 10 -r requirements.txt
 
 # ---- Stage 2: production image (lean) ----
 FROM python:3.12-slim AS production
