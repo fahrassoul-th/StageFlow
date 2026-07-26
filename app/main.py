@@ -10,7 +10,31 @@ from app.middlewares.security_headers import SecurityHeadersMiddleware
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 
-app = FastAPI(title="StageFlow", version="0.1.0")
+openapi_tags = [
+    {"name": "auth", "description": "Registration and JWT login (OAuth2 password flow)."},
+    {"name": "users", "description": "The authenticated user's own profile."},
+    {
+        "name": "offers",
+        "description": "Internship offers: draft -> submitted -> published/rejected.",
+    },
+    {
+        "name": "applications",
+        "description": "Student applications to a published offer: "
+        "pending -> accepted/rejected/withdrawn.",
+    },
+    {"name": "stats", "description": "Aggregate counts for program managers."},
+]
+
+app = FastAPI(
+    title="StageFlow",
+    description=(
+        "Internal API for a Master DSIA program to manage internship offers, "
+        "student applications, and pedagogical review - with per-role visibility "
+        "so each actor only sees and modifies what they're allowed to."
+    ),
+    version="0.1.0",
+    openapi_tags=openapi_tags,
+)
 
 app.include_router(auth.router)
 app.include_router(users.router)
