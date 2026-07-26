@@ -8,3 +8,11 @@ python_functions = ["test_*"]
 [tool.coverage.run]
 source = ["app"]
 omit = ["app/main.py", "alembic/*"]
+# Two independent reasons code silently "disappears" from coverage on an
+# async FastAPI + SQLAlchemy-async app unless both are declared:
+# - "greenlet": SQLAlchemy's async engine bridges the sync DBAPI through
+#   greenlet switches (await_only/greenlet_spawn).
+# - "thread": FastAPI runs plain `def` dependencies (the repository/
+#   pagination factory functions) in a threadpool worker, a different
+#   OS thread coverage won't trace without this.
+concurrency = ["greenlet", "thread"]
