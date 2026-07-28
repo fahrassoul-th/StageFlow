@@ -1,5 +1,7 @@
 # StageFlow
 
+[![codecov](https://codecov.io/github/fahrassoul-th/StageFlow/graph/badge.svg?token=31DVBHFVKF)](https://codecov.io/github/fahrassoul-th/StageFlow)
+
 API interne de gestion des stages pour un Master DSIA : offres de stage, candidatures,
 validation pédagogique — chaque rôle ne voit et ne modifie que ce qui le concerne.
 
