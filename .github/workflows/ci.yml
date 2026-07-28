@@ -46,10 +46,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Compute lowercase image name
+        # GHCR requires the repository path to be lowercase; github.repository
+        # preserves the repo's actual casing (StageFlow), which Docker rejects.
+        run: echo "IMAGE_NAME=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_ENV"
+
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
           target: production
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
