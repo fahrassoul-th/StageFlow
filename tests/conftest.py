@@ -47,7 +47,11 @@ async def client(test_engine) -> AsyncClient:
             await session.commit()
 
     app.dependency_overrides[get_db] = override_get_db
-    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+    # raise_app_exceptions=False so an unhandled exception in the app
+    # surfaces as a real 500 response to assert on, the same way a real
+    # deployed server behaves - not as a raw exception in the test.
+    transport = ASGITransport(app=app, raise_app_exceptions=False)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
     app.dependency_overrides.clear()
 

@@ -25,3 +25,28 @@ def test_require_roles_rejects_non_matching_role():
     dependency = require_roles(RoleEnum.company)
     with pytest.raises(PermissionDeniedError):
         dependency(current_user=_user(RoleEnum.student))
+
+
+@pytest.mark.parametrize(
+    ("role", "should_pass"),
+    [
+        (RoleEnum.student, False),
+        (RoleEnum.company, True),
+        (RoleEnum.program_manager, False),
+        (RoleEnum.admin, False),
+    ],
+)
+def test_require_company_only_accepts_company_across_all_roles(
+    role: RoleEnum, should_pass: bool
+) -> None:
+    """Exercises require_roles against every role in one pass, rather than
+    one hand-picked accept case and one hand-picked reject case - catches
+    a mistake like an extra role slipping into the allow-list."""
+    dependency = require_roles(RoleEnum.company)
+    user = _user(role)
+
+    if should_pass:
+        assert dependency(current_user=user) is user
+    else:
+        with pytest.raises(PermissionDeniedError):
+            dependency(current_user=user)
