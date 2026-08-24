@@ -100,7 +100,14 @@ uvicorn app.main:app --reload
 pytest --cov=app --cov-report=term-missing
 ```
 
+<<<<<<< HEAD
 La suite comprend **53 tests unitaires et d’intégration** et ne nécessite aucune base de données externe : chaque test utilise une base SQLite asynchrone (`aiosqlite`) isolée et créée en mémoire, injectée grâce à un override de la dépendance `get_db`. La couverture globale actuelle est de **99 %**.
+=======
+La suite comprend **53 tests unitaires et d'intégration** et ne nécessite aucune base
+de données externe : chaque test utilise une base SQLite asynchrone (`aiosqlite`)
+isolée et créée en mémoire, injectée grâce à un override de la dépendance `get_db`.
+La couverture globale actuelle est de **99 %**.
+>>>>>>> 43fd04a (Update README test count and offer documentation)
 
 > Note technique si vous modifiez la config de couverture : `pyproject.toml` déclare
 > `concurrency = ["greenlet", "thread"]` sous `[tool.coverage.run]`. Sans ça, `coverage.py`
@@ -130,7 +137,7 @@ l'activer sur un dépôt GitHub :
 | POST | `/auth/login` | public | OAuth2 password flow (login par username) → access + refresh token |
 | POST | `/auth/refresh` | public | Échanger un refresh token contre une nouvelle paire de tokens |
 | GET | `/users/me` | authentifié | Profil courant |
-| POST | `/offers` | company | Créer une offre brouillon |
+| POST | `/offers` | company | Créer une offre brouillon ; une offre incomplète ne peut pas être publiée |
 | GET | `/offers` | authentifié | Catalogue (adapté au rôle) |
 | GET | `/offers/{id}` | authentifié | Détail d'une offre (404 si non visible) |
 | PATCH | `/offers/{id}/submit` | company | draft → submitted |
