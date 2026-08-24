@@ -100,10 +100,7 @@ uvicorn app.main:app --reload
 pytest --cov=app --cov-report=term-missing
 ```
 
-La suite (48 tests, unitaires + intégration) ne nécessite **aucune base de données
-réelle** : chaque test tourne contre une base SQLite async (`aiosqlite`) fraîche et en
-mémoire, injectée via un override de la dépendance `get_db`. Couverture actuelle : 99 %
-(100 % sur tout le code applicatif).
+La suite comprend **53 tests unitaires et d’intégration** et ne nécessite aucune base de données externe : chaque test utilise une base SQLite asynchrone (`aiosqlite`) isolée et créée en mémoire, injectée grâce à un override de la dépendance `get_db`. La couverture globale actuelle est de **99 %**.
 
 > Note technique si vous modifiez la config de couverture : `pyproject.toml` déclare
 > `concurrency = ["greenlet", "thread"]` sous `[tool.coverage.run]`. Sans ça, `coverage.py`
